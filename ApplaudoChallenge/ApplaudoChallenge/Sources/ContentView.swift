@@ -1,29 +1,25 @@
 import SwiftUI
 
-public struct ContentView: View {
-    public init() {}
+struct ContentView: View {
+    private let dependencies: AppDependencies
 
-    public var body: some View {
+    init(dependencies: AppDependencies = .live) {
+        self.dependencies = dependencies
+    }
+
+    var body: some View {
         TabView {
             // MARK: - Tab 1: Cat List
-            // TODO: Replace placeholder with your CatListView
             NavigationStack {
-                Text("Cat List")
-                    .font(AppTheme.Fonts.title)
-                    .foregroundColor(AppTheme.Colors.textPrimary)
-                    .navigationTitle("Cats")
+                BreedListView(viewModel: BreedListViewModel(service: dependencies.breedService))
             }
             .tabItem {
                 Label("Cats", systemImage: "cat")
             }
 
             // MARK: - Tab 2: Add Cat
-            // TODO: Replace placeholder with your AddCatStepperView
             NavigationStack {
-                Text("Add New Cat")
-                    .font(AppTheme.Fonts.title)
-                    .foregroundColor(AppTheme.Colors.textPrimary)
-                    .navigationTitle("Add Cat")
+                AddCatStepperView(viewModel: AddCatViewModel(store: dependencies.catStore))
             }
             .tabItem {
                 Label("Add Cat", systemImage: "plus.circle")

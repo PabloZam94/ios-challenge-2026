@@ -5,6 +5,7 @@
 //  Created by Christian Rivera on 26/3/26.
 //
 
+import Foundation
 import Moya
 
 extension MoyaProvider {
@@ -19,5 +20,15 @@ extension MoyaProvider {
         let plugins: [PluginType] = [loggerPlugin] // Add authentication, retry, or caching plugins here if needed.
 
         return MoyaProvider<MultiTarget>(session: networkingSession, plugins: plugins)
+    }
+
+    // MARK: - Stubbed Provider
+    /// Answers every request with the target's `sampleData`, without hitting the network.
+    static func stubbedProvider(delay: TimeInterval) -> MoyaProvider<MultiTarget> {
+        let stubClosure: (MultiTarget) -> StubBehavior = delay > 0
+            ? MoyaProvider<MultiTarget>.delayedStub(delay)
+            : MoyaProvider<MultiTarget>.immediatelyStub
+
+        return MoyaProvider<MultiTarget>(stubClosure: stubClosure)
     }
 }
